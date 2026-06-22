@@ -7,7 +7,7 @@ const Register = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [confirmPassword, setconfirmPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [alert, setAlert] = useState({})
 
   const handleSubmit = async(e) =>{
@@ -129,7 +129,7 @@ const Register = () => {
                   placeholder="confirm password"
                   className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
                   value={confirmPassword}
-                  onChange={e => setconfirmPassword(e.target.value)}
+                  onChange={e => setConfirmPassword(e.target.value)}
               />
           </div>
 

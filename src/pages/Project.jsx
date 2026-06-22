@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import useProjects from '../hooks/useProjects';
-import useAdmin from '../hooks/useAdnmin';
+import useAdmin from '../hooks/useAdmin';
 import ModalFormTodo from '../components/ModalFormTodo';
 import ModalDeleteTodo from '../components/ModalDeleteTodo';
 import Todo from '../components/Todo';
 import Collaborator from '../components/Collaborator';
-import ModalDeleteCollborator from '../components/ModalDeleteCollaborator';
+import ModalDeleteCollaborator from '../components/ModalDeleteCollaborator';
 import io from 'socket.io-client';
 
 let socket;
@@ -181,7 +181,7 @@ const Project = () => {
 
       <ModalFormTodo />
       <ModalDeleteTodo />
-      <ModalDeleteCollborator />
+      <ModalDeleteCollaborator />
     </>
   );
 };

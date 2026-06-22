@@ -5,7 +5,7 @@ import Alert from './Alert';
 
 import { useParams } from 'react-router-dom';
 
-const PRIORIDAD = ['low', 'medium', 'high'];
+const PRIORITIES = ['low', 'medium', 'high'];
 
 const ModalFormTodo = () => {
   const [id, setId] = useState('');
@@ -38,7 +38,7 @@ const ModalFormTodo = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if ([name, description, , deliveryDate, priority].includes('')) {
+    if ([name, description, deliveryDate, priority].includes('')) {
       viewAlert({
         msg: 'All fields are required',
         error: true
@@ -195,9 +195,9 @@ const ModalFormTodo = () => {
                         onChange={(e) => setPriority(e.target.value)}
                       >
                         <option value="">Select Priority</option>
-                        {PRIORIDAD.map((prioridad) => (
-                          <option key={prioridad} value={prioridad}>
-                            {prioridad}
+                        {PRIORITIES.map((priority) => (
+                          <option key={priority} value={priority}>
+                            {priority}
                           </option>
                         ))}
                       </select>

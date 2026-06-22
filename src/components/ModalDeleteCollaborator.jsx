@@ -2,7 +2,7 @@ import { Fragment,} from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import useProjects from '../hooks/useProjects'
 
-const ModalDeleteCollborator = () => {
+const ModalDeleteCollaborator = () => {
 
     const { modalDeleteCollaborator, handleModalDeleteCollaborator, deleteCollaborator } = useProjects();
 
@@ -95,4 +95,4 @@ const ModalDeleteCollborator = () => {
     )
 }
 
-export default ModalDeleteCollborator
+export default ModalDeleteCollaborator

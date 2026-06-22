@@ -1,6 +1,6 @@
 import { formatDate } from '../helpers/formatDate';
 import useProjects from '../hooks/useProjects';
-import useAdmin from '../hooks/useAdnmin';
+import useAdmin from '../hooks/useAdmin';
 
 const Todo = ({ todo }) => {
   const { handleModalEditTodo, handleModalDeleteTodo, todoComplete } = useProjects();

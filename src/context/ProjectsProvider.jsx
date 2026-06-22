@@ -36,7 +36,7 @@ const ProjectsProvider = ({ children }) => {
             Authorization: `Bearer ${token}`
           }
         };
-        const { data } = await clienteAxios.get('/proyects', config);
+        const { data } = await clienteAxios.get('/projects', config);
         setProjects(data);
       } catch (error) {
         console.log(error);
@@ -81,7 +81,7 @@ const ProjectsProvider = ({ children }) => {
       };
 
       const { data } = await clienteAxios.put(
-        `/proyects/${project.id}`,
+        `/projects/${project.id}`,
         project,
         config
       );
@@ -119,7 +119,7 @@ const ProjectsProvider = ({ children }) => {
         }
       };
 
-      const { data } = await clienteAxios.post('/proyects', project, config);
+      const { data } = await clienteAxios.post('/projects', project, config);
 
       setProjects([...projects, data]);
 
@@ -151,7 +151,7 @@ const ProjectsProvider = ({ children }) => {
           Authorization: `Bearer ${token}`
         }
       };
-      const { data } = await clienteAxios.get(`/proyects/${id}`, config);
+      const { data } = await clienteAxios.get(`/projects/${id}`, config);
       setProject(data);
     } catch (error) {
       navigate('/projects');
@@ -181,7 +181,7 @@ const ProjectsProvider = ({ children }) => {
           Authorization: `Bearer ${token}`
         }
       };
-      const { data } = await clienteAxios.delete(`/proyects/${id}`, config);
+      const { data } = await clienteAxios.delete(`/projects/${id}`, config);
       const projectsUpdate = projects.filter((p) => p._id !== id);
       setProjects(projectsUpdate);
       setAlert({
@@ -319,7 +319,7 @@ const ProjectsProvider = ({ children }) => {
         }
       };
       const { data } = await clienteAxios.post(
-        `/proyects/collaborators`,
+        `/projects/collaborators`,
         { email },
         config
       );
@@ -354,7 +354,7 @@ const ProjectsProvider = ({ children }) => {
         }
       };
       const { data } = await clienteAxios.post(
-        `/proyects/collaborators/${project._id}`,
+        `/projects/collaborators/${project._id}`,
         email,
         config
       );
@@ -396,7 +396,7 @@ const ProjectsProvider = ({ children }) => {
         }
       };
       const { data } = await clienteAxios.post(
-        `/proyects/delete-collaborator/${project._id}`,
+        `/projects/delete-collaborator/${project._id}`,
         { id: collaborator._id },
         config
       );

@@ -38,22 +38,22 @@ const Project = () => {
 
   useEffect(() => {
     socket.on('agree-todo', (newTodo) => {
-      if (newTodo.proyect === project._id) {
+      if (newTodo.project === project._id) {
         submitTodosProject(newTodo);
       }
     });
     socket.on('deleted-todo', deleteTodo =>{
-      if (deleteTodo.proyect === project._id) {
+      if (deleteTodo.project === project._id) {
         deleteTodoProject(deleteTodo);
       }
     })
     socket.on('edited-todo', (ediTodo) =>{
-      if (ediTodo.proyect._id === project._id) {
+      if (ediTodo.project._id === project._id) {
         updateTodoProject(ediTodo);
       }
     })
     socket.on('completed-todo',(completedTodo)=>{
-      if (completedTodo.proyect._id === project._id) {
+      if (completedTodo.project._id === project._id) {
         updateStateTodoProject(completedTodo);
       }
     })

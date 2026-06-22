@@ -7,7 +7,7 @@ const ProjectForm = () => {
     const [id , setId] = useState(null)
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
-    const [deliverDate, setDeliverDate] = useState('')
+    const [deliveryDate, setDeliveryDate] = useState('')
     const [client, setClient] = useState('')
 
     const params = useParams()
@@ -18,7 +18,7 @@ const ProjectForm = () => {
             setId(project._id)
             setName(project.name)
             setDescription(project.description)
-            setDeliverDate(project.deliverDate?.split('T')[0])
+            setDeliveryDate(project.deliveryDate?.split('T')[0])
             setClient(project.client)
         } 
     }, [params])
@@ -27,7 +27,7 @@ const ProjectForm = () => {
     const handleSubmit = async e => {
         e.preventDefault()
 
-        if ([name, description, deliverDate, client].includes('')) {
+        if ([name, description, deliveryDate, client].includes('')) {
             viewAlert(
                 {
                     msg: 'All fields are required',
@@ -42,13 +42,13 @@ const ProjectForm = () => {
             id,
             name,
             description,
-            deliverDate,
+            deliveryDate,
             client
         })
         setId(null)
         setName('')
         setDescription('')
-        setDeliverDate('')
+        setDeliveryDate('')
         setClient('')
 
 
@@ -103,8 +103,8 @@ const ProjectForm = () => {
                     id='date-delivery'
                     className='border w-full p-2 mt-2 placeholder-gray-400 rounded-md'
                     type="date"
-                    value={deliverDate}
-                    onChange={e => setDeliverDate(e.target.value)} />
+                    value={deliveryDate}
+                    onChange={e => setDeliveryDate(e.target.value)} />
             </div>
 
             <div className='mb-5'>

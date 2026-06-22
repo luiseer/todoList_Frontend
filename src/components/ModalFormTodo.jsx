@@ -51,7 +51,7 @@ const ModalFormTodo = () => {
       description,
       deliveryDate,
       priority,
-      proyect: params.id
+      project: params.id
     });
     setId('');
     setName('');

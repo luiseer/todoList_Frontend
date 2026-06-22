@@ -24,34 +24,28 @@ const CollaboratorForm = () => {
 
   return (
     <form
-      onSubmit={ handleSubmit }
-      className="bg-white py-10 px-5 w-full md:w-1/2 rounded-lg shadow "
+      onSubmit={handleSubmit}
+      className="card p-8 w-full md:w-1/2 space-y-6"
     >
-      { msg && <Alert alert={alert} /> }
+      {msg && <Alert alert={alert} />}
 
-      <div className="mb-5">
-        <label
-          htmlFor="email"
-          className=" text-sm font-bold uppercase text-gray-700"
-        >
-          Email Collaborator
+      <div>
+        <label htmlFor="email" className="label">
+          Collaborator Email
         </label>
         <input
           type="email"
           id="email"
-          placeholder="email of user"
-          className="border-2 w-full p-2 mt-3 placeholder-gray-400 rounded-md"
+          placeholder="email@example.com"
+          className="input-field"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
       </div>
 
-      <input
-        type="submit"
-        className="bg-sky-600 hover:bg-sky-700 w-full p-3 text-white uppercase 
-                                  font-bold cursor-pointer transition-colors rounded-lg text-sm"
-        value="Find Collaborator"
-      />
+      <button type="submit" className="btn-primary w-full">
+        Search Collaborator
+      </button>
     </form>
   );
 };

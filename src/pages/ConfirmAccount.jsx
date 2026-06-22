@@ -35,21 +35,21 @@ const ConfirmAccount = () => {
 
   return (
     <>
-      <h1 className="text-sky-600 font-black text-6xl capitalize">
-        Confirm your account and start creating your
-        <span className="text-slate-700"> projects</span>
-      </h1>
-      <div className='mt-20 md:mt-10 shadow-lg px-5 py-10 rounded-xl bg-white text-sm'>
-        {msg && <Alert alert={alert} />}
-        {userConfirm && (
+      <h2 className="text-2xl font-bold text-slate-900 text-center mb-2">Confirm your account</h2>
+      <p className="text-slate-500 text-sm text-center mb-8">Almost there!</p>
+
+      {msg && <div className="mb-6"><Alert alert={alert} /></div>}
+
+      {userConfirm && (
+        <div className="mt-4 text-center animate-fade-in">
           <Link
             to="/"
-            className="block text-center my-5 text-slate-500 uppercase text-sm"
+            className="btn-primary inline-block"
           >
-            Sing in
+            Sign in
           </Link>
-        )}
-      </div>
+        </div>
+      )}
     </>
   );
 };

@@ -32,7 +32,7 @@ const Project = () => {
   }, []);
 
   useEffect(() => {
-    socket = io(import.meta.env.VITE_BACKEND_URL);
+    socket = io(import.meta.env.VITE_BACKEND_URL || undefined);
     socket.emit('open-project', params.id);
   }, []);
 
@@ -42,17 +42,17 @@ const Project = () => {
         submitTodosProject(newTodo);
       }
     });
-    socket.on('deleted-todo', deleteTodo =>{
+    socket.on('deleted-todo', deleteTodo => {
       if (deleteTodo.project === project._id) {
         deleteTodoProject(deleteTodo);
       }
     })
-    socket.on('edited-todo', (ediTodo) =>{
+    socket.on('edited-todo', (ediTodo) => {
       if (ediTodo.project._id === project._id) {
         updateTodoProject(ediTodo);
       }
     })
-    socket.on('completed-todo',(completedTodo)=>{
+    socket.on('completed-todo', (completedTodo) => {
       if (completedTodo.project._id === project._id) {
         updateStateTodoProject(completedTodo);
       }
@@ -60,129 +60,120 @@ const Project = () => {
   });
 
   const { name } = project;
-
   const { msg } = alert;
 
-  return loading ? (
-    <div className="border border-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto">
-      <div className="animate-pulse flex space-x-4">
-        <div className="rounded-full bg-slate-700 h-10 w-10"></div>
-        <div className="flex-1 space-y-6 py-1">
-          <div className="h-2 bg-slate-700 rounded"></div>
-          <div className="space-y-3">
-            <div className="grid grid-cols-3 gap-4">
-              <div className="h-2 bg-slate-700 rounded col-span-2"></div>
-              <div className="h-2 bg-slate-700 rounded col-span-1"></div>
-            </div>
-            <div className="h-2 bg-slate-700 rounded"></div>
+  if (loading) {
+    return (
+      <div className="card p-8 animate-fade-in">
+        <div className="animate-pulse space-y-6">
+          <div className="h-8 bg-slate-200 rounded w-1/3"></div>
+          <div className="h-4 bg-slate-200 rounded w-1/4"></div>
+          <div className="space-y-3 pt-4">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="h-20 bg-slate-200 rounded-xl"></div>
+            ))}
           </div>
         </div>
       </div>
-    </div>
-  ) : (
-    <>
-      <h1 className="font-black text-4xl">{name}</h1>
-      {admin && (
-        <div className="flex justify-between">
-          <div className="flex items-center gap-2 text-gray-400 hover:text-black">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
+    );
+  }
+
+  return (
+    <div className="animate-fade-in">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div>
+          <h1 className="text-3xl font-black text-slate-900">{name}</h1>
+        </div>
+        {admin && (
+          <div className="flex items-center gap-3">
+            <Link
+              to={`/projects/edit/${params.id}`}
+              className="btn-secondary !py-2.5 !px-4 text-sm flex items-center gap-2"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-              />
-            </svg>
-            <Link className="uppercase" to={`/projects/edit/${params.id}`}>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+              </svg>
               Edit
             </Link>
+            <button
+              onClick={handleModalTodo}
+              className="btn-primary !py-2.5 !px-4 text-sm flex items-center gap-2"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+              </svg>
+              New Todo
+            </button>
           </div>
-        </div>
-      )}
-
-      {admin && (
-        <button
-          onClick={handleModalTodo}
-          type="button"
-          className="text-sm px-5 py-3 w-full mt-3 md:w-auto rounded-lg uppercase font-bold bg-sky-400 text-white text-center flex gap-2 items-center justify-center"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-7 w-7"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          New Todo
-        </button>
-      )}
-
-      <p className="font-bold text-xl mt-10">Todos of Project</p>
-
-      <div className="bg-white shadow mt-10 rounded-lg">
-        {project.todos?.length ? (
-          project.todos?.map((todo) => <Todo key={todo._id} todo={todo} />)
-        ) : (
-          <p className="text-center my-5 p-10">Not todos in this project</p>
         )}
       </div>
 
+      {msg && <div className="mb-6"><Alert alert={alert} /></div>}
+
+      <section className="mb-10">
+        <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-500" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+            <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
+          </svg>
+          Tasks
+        </h2>
+        <div className="card divide-y divide-slate-100 overflow-hidden">
+          {project.todos?.length ? (
+            project.todos?.map((todo) => <Todo key={todo._id} todo={todo} />)
+          ) : (
+            <div className="text-center py-12 px-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-slate-300 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+              <p className="text-slate-500 font-medium">No tasks yet</p>
+              {admin && <p className="text-slate-400 text-sm mt-1">Click "New Todo" to add one</p>}
+            </div>
+          )}
+        </div>
+      </section>
+
       {admin && (
-        <>
-          <div className="flex items-center justify-between mt-10">
-            <p className="font-bold text-xl ">Collaborators</p>
-            <div className="flex items-center gap-2 text-gray-400 hover:text-black">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-500" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+              </svg>
+              Collaborators
+            </h2>
+            <Link
+              to={`/projects/new-collaborator/${project._id}`}
+              className="btn-primary !py-2 !px-3 text-xs flex items-center gap-1.5"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
               </svg>
-              <Link
-                className="uppercase font-bold"
-                to={`/projects/new-collaborator/${project._id}`}
-              >
-                {' '}
-                Add
-              </Link>
-            </div>
+              Add
+            </Link>
           </div>
-          <div className="bg-white shadow mt-10 rounded-lg">
+          <div className="card divide-y divide-slate-100 overflow-hidden">
             {project.collaborators?.length ? (
               project.collaborators?.map((collaborator) => (
-                <Collaborator
-                  key={collaborator._id}
-                  collaborator={collaborator}
-                />
+                <Collaborator key={collaborator._id} collaborator={collaborator} />
               ))
             ) : (
-              <p className="text-center my-5 p-10">
-                Not collaborators in this project
-              </p>
+              <div className="text-center py-12 px-4">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-slate-300 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                </svg>
+                <p className="text-slate-500 font-medium">No collaborators yet</p>
+                <p className="text-slate-400 text-sm mt-1">Invite people to collaborate on this project</p>
+              </div>
             )}
           </div>
-        </>
+        </section>
       )}
 
       <ModalFormTodo />
       <ModalDeleteTodo />
       <ModalDeleteCollaborator />
-    </>
+    </div>
   );
 };
 

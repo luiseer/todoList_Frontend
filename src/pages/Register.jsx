@@ -53,7 +53,7 @@ const Register = () => {
             setconfirmPassword('')
       } catch (error) {
             setAlert({
-                msg: error.response.data.msg,
+                msg: error.response?.data?.msg || error.message || 'There was an error',
                 error: true
             })
       }

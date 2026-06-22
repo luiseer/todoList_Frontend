@@ -155,9 +155,8 @@ const ProjectsProvider = ({ children }) => {
       setProject(data);
     } catch (error) {
       navigate('/projects');
-      console.log(msg);
       setAlert({
-        msg: error.response.data?.msg,
+        msg: error.response?.data?.msg || 'There was an error',
         error: true
       });
       setTimeout(() => {
@@ -328,7 +327,7 @@ const ProjectsProvider = ({ children }) => {
       setAlert({});
     } catch (error) {
       setAlert({
-        msg: error.response.data?.msg,
+        msg: error.response?.data?.msg || 'There was an error',
         error: true
       });
     } finally {
@@ -367,7 +366,7 @@ const ProjectsProvider = ({ children }) => {
       setCollaborator({});
     } catch (error) {
       setAlert({
-        msg: error.response?.data?.msg,
+        msg: error.response?.data?.msg || 'There was an error',
         error: true
       });
     } finally {

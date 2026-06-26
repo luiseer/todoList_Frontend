@@ -42,6 +42,11 @@ const Login = () => {
   };
   const { msg } = alert;
 
+  const fillDemo = () => {
+    setEmail('test@test.com');
+    setPassword('123456');
+  };
+
   return (
     <>
       <h2 className="text-2xl font-bold text-slate-900 text-center mb-2">Welcome back</h2>
@@ -77,6 +82,38 @@ const Login = () => {
           Sign in
         </button>
       </form>
+
+      <div className="relative my-8">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-slate-200" />
+        </div>
+        <div className="relative flex justify-center">
+          <span className="bg-white px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
+            Demo
+          </span>
+        </div>
+      </div>
+
+      <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4 transition-colors hover:border-indigo-200 hover:bg-indigo-50/30">
+        <div className="flex items-center justify-between gap-4">
+          <div className="min-w-0 flex-1">
+            <p className="text-xs font-medium uppercase tracking-wider text-slate-400">Test credentials</p>
+            <p className="mt-1 truncate text-sm text-slate-600">
+              <span className="font-medium text-slate-800">Email:</span> test@test.com
+            </p>
+            <p className="truncate text-sm text-slate-600">
+              <span className="font-medium text-slate-800">Password:</span> 123456
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={fillDemo}
+            className="shrink-0 rounded-lg border border-indigo-200 bg-white px-3 py-2 text-xs font-semibold text-indigo-600 transition-all hover:bg-indigo-600 hover:text-white hover:shadow-sm"
+          >
+            Auto-fill
+          </button>
+        </div>
+      </div>
 
       <div className="mt-6 space-y-3 text-center">
         <Link to="register" className="block text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">

@@ -33,7 +33,6 @@ const Login = () => {
       localStorage.setItem('token', data.token);
       setAuth(data);
       navigate('/projects');
-      
     } catch (error) {
       setAlert({
         msg: error.response?.data?.msg || error.message || 'There was an error',
@@ -45,71 +44,48 @@ const Login = () => {
 
   return (
     <>
-      <h1 className="text-sky-600 font-black text-6xl capitalize">
-        Login and manage your <span className="text-slate-700">projects</span>
-      </h1>
+      <h2 className="text-2xl font-bold text-slate-900 text-center mb-2">Welcome back</h2>
+      <p className="text-slate-500 text-sm text-center mb-8">Sign in to your account</p>
 
-      {msg && <Alert alert={alert} />}
+      {msg && <div className="mb-6"><Alert alert={alert} /></div>}
 
-      <form
-        className="my-10 bg-white shadow rounded p-10"
-        onSubmit={handleSubmit}
-      >
-        <div className="my-5">
-          <label
-            className="uppercase text-gray-600 block text-xl font-bold"
-            htmlFor="email"
-          >
-            email
-          </label>
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div>
+          <label className="label" htmlFor="email">Email</label>
           <input
             id="email"
             type="email"
-            placeholder="email to register"
-            className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+            placeholder="you@example.com"
+            className="input-field"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div className="my-5">
-          <label
-            className="uppercase text-gray-600 block text-xl font-bold"
-            htmlFor="password"
-          >
-            password
-          </label>
+        <div>
+          <label className="label" htmlFor="password">Password</label>
           <input
             id="password"
             type="password"
-            placeholder="password to register"
-            className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+            placeholder="Enter your password"
+            className="input-field"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
 
-        <input
-          type="submit"
-          value="login"
-          className="bg-sky-700 w-full py-3 text-white uppercase font-bold 
-                    rounded hover:cursor-pointer hover:bg-sky-800 mb-5"
-        />
+        <button type="submit" className="btn-primary w-full">
+          Sign in
+        </button>
       </form>
 
-      <nav className="lg:flex lg:justify-between">
-        <Link
-          to="register"
-          className="block text-center my-5 text-slate-500 uppercase text-sm"
-        >
-          You do not have an account?, singup
+      <div className="mt-6 space-y-3 text-center">
+        <Link to="register" className="block text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">
+          Don't have an account? Sign up
         </Link>
-        <Link
-          to="forgot-password"
-          className="block text-center my-5 text-slate-500 uppercase text-sm"
-        >
-          Forget my password
+        <Link to="forgot-password" className="block text-sm text-slate-500 hover:text-slate-700 transition-colors">
+          Forgot your password?
         </Link>
-      </nav>
+      </div>
     </>
   );
 };

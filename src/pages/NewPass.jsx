@@ -4,118 +4,96 @@ import clienteAxios from '../config/clienteAxios'
 import Alert from '../components/Alert'
 
 const NewPass = () => {
-    const [passwordUpdate, setPasswordUpdate] = useState(false)
-    const [password, setPassword] = useState('')
-    const [validToken, setValidToken] = useState(false)
-    const [alert, setAlert] = useState({})
+  const [passwordUpdate, setPasswordUpdate] = useState(false)
+  const [password, setPassword] = useState('')
+  const [validToken, setValidToken] = useState(false)
+  const [alert, setAlert] = useState({})
 
-    const params = useParams()
-    const { token } = params
+  const params = useParams()
+  const { token } = params
 
+  useEffect(() => {
+    const confirmToken = async () => {
+      try {
+        await clienteAxios(`/user/forgot-password/${token}`)
+        setValidToken(true)
+      } catch (error) {
+        setAlert({
+          msg: error.response?.data?.msg || 'Invalid or expired token',
+          error: true
+        })
+      }
+    };
+    confirmToken()
+  }, [])
 
-
-    useEffect(() => {
-        const confirmToken = async () => {
-            try {
-                //TODO: move to client axios
-                await clienteAxios(`/user/forgot-password/${token}`)
-                setValidToken(true)
-            } catch (error) {
-                setAlert({
-                    msg: error.response?.data?.msg || error.message || 'There was an error',
-                    error: true
-                })
-            }
-        };
-        confirmToken()
-    }, [])
-
-    const handleSubmit = async e => {
-        e.preventDefault()
-        if (password.length < 6) {
-            setAlert({
-                msg: 'Password must be at least 6 characters',
-                error: true
-            })
-            return
-        }
-        try {
-            const { data } = await clienteAxios.post(`/user/forgot-password/${token}`,
-                {
-                    password
-                })
-         
-            setAlert({
-                msg: data.msg,
-                error: false
-            })
-            setPasswordUpdate(true)
-            setPassword('')
-        } catch (err) {
-            setAlert({
-                msg: err.response.data.msg,
-                error: true
-            })
-        }
+  const handleSubmit = async e => {
+    e.preventDefault()
+    if (password.length < 6) {
+      setAlert({
+        msg: 'Password must be at least 6 characters',
+        error: true
+      })
+      return
     }
+    try {
+      const { data } = await clienteAxios.post(`/user/forgot-password/${token}`,
+        { password })
 
-    const { msg } = alert
+      setAlert({
+        msg: data.msg,
+        error: false
+      })
+      setPasswordUpdate(true)
+      setPassword('')
+    } catch (err) {
+      setAlert({
+        msg: err.response?.data?.msg || err.message || 'There was an error',
+        error: true
+      })
+    }
+  }
 
-    return (
-        <>
-            <h1
-                className="text-sky-600 font-black text-6xl capitalize">
-                Reset your password and do not lose access to your
-                <span className="text-slate-700">
-                    {' '}projects
-                </span>
-            </h1>
+  const { msg } = alert
 
-            {msg && <Alert alert={alert} />}
+  return (
+    <>
+      <h2 className="text-2xl font-bold text-slate-900 text-center mb-2">Reset your password</h2>
+      <p className="text-slate-500 text-sm text-center mb-8">Choose a new password</p>
 
-            {
-                validToken && (
-                    <form
-                        className="my-10 bg-white shadow rounded p-10"
-                        onSubmit={handleSubmit}
-                    >
+      {msg && <div className="mb-6"><Alert alert={alert} /></div>}
 
-                        <div className="my-5">
-                            <label
-                                className="uppercase text-gray-600 block text-xl font-bold"
-                                htmlFor="password"
-                            >New password</label>
-                            <input
-                                id="password"
-                                type="password"
-                                placeholder="new password to register"
-                                className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                        </div>
-                        <input
-                            type="submit"
-                            value="Reset Password"
-                            className="bg-sky-700 w-full py-3 text-white uppercase font-bold 
-                    rounded hover:cursor-pointer hover:bg-sky-800 mb-5"
-                        />
+      {validToken && (
+        <form className="space-y-5" onSubmit={handleSubmit}>
+          <div>
+            <label className="label" htmlFor="password">New password</label>
+            <input
+              id="password"
+              type="password"
+              placeholder="At least 6 characters"
+              className="input-field"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <button type="submit" className="btn-primary w-full">
+            Reset password
+          </button>
+        </form>
+      )}
 
-                    </form>
-                )
-            }
-
-            {passwordUpdate && (
-                <Link
-                    to="/"
-                    className="block text-center my-5 text-slate-500 uppercase text-sm"
-                >
-                    Sing in
-                </Link>
-            )}
-
-        </>
-    )
+      {passwordUpdate && (
+        <div className="mt-6 text-center animate-fade-in">
+          <Link
+            to="/"
+            className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors"
+          >
+            Sign in with your new password
+          </Link>
+        </div>
+      )}
+    </>
+  )
 }
 
 export default NewPass

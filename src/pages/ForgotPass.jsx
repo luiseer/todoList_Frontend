@@ -5,88 +5,72 @@ import Alert from '../components/Alert'
 
 const ForgotPass = () => {
 
-    const [email, setEmail] = useState('')
-    const [alert, setAlert] = useState({})
+  const [email, setEmail] = useState('')
+  const [alert, setAlert] = useState({})
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        if (email === '' || email < 6) {
-            setAlert({
-                msg: 'Please enter your email address',
-                error: true
-            });
-            return
-        }
-        try {
-            const { data } = await clienteAxios.post(`/user/forgot-password`,
-                {
-                    email
-                })
-            setAlert({
-                msg: data.msg,
-                error: false
-            })
-            setEmail('')
-            
-        } catch (error) {
-            setAlert({
-                msg: error.response?.data?.msg || error.message || 'There was an error',
-                error: true
-            })
-        }
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (email === '' || email.length < 6) {
+      setAlert({
+        msg: 'Please enter your email address',
+        error: true
+      });
+      return
     }
+    try {
+      const { data } = await clienteAxios.post('/user/forgot-password',
+        { email })
+      setAlert({
+        msg: data.msg,
+        error: false
+      })
+      setEmail('')
 
-    const { msg } = alert
+    } catch (error) {
+      setAlert({
+        msg: error.response?.data?.msg || error.message || 'There was an error',
+        error: true
+      })
+    }
+  }
 
-    return (
-        <>
-            <h1
-                className="text-sky-600 font-black text-6xl capitalize">
-                Get your access back so don't lose your
-                <span className="text-slate-700">
-                    {' '}projects
-                </span>
-            </h1>
-            {msg && <Alert alert={alert} />}
-            <form
-                className="my-10 bg-white shadow rounded p-10"
-                onSubmit={handleSubmit}
-            >
-                <div className="my-5">
-                    <label
-                        className="uppercase text-gray-600 block text-xl font-bold"
-                        htmlFor="email"
-                    >email</label>
-                    <input
-                        id="email"
-                        type="email"
-                        placeholder="email register"
-                        className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </div>
+  const { msg } = alert
 
-                <input
-                    type="submit"
-                    value="send instructions"
-                    className="bg-sky-700 w-full py-3 text-white uppercase font-bold 
-                rounded hover:cursor-pointer hover:bg-sky-800 mb-5"
-                />
+  return (
+    <>
+      <h2 className="text-2xl font-bold text-slate-900 text-center mb-2">Reset password</h2>
+      <p className="text-slate-500 text-sm text-center mb-8">We'll send you instructions</p>
 
-            </form>
+      {msg && <div className="mb-6"><Alert alert={alert} /></div>}
 
-            <nav className='lg:flex lg:justify-between'>
-                <Link to="/" className='block text-center my-5 text-slate-500 uppercase text-sm'>
-                    Do you already have an account?, Sing in
-                </Link>
-                <Link to="/register" className='block text-center my-5 text-slate-500 uppercase text-sm'>
-                    You do not have an account?, Sing up
-                </Link>
-            </nav>
+      <form className="space-y-5" onSubmit={handleSubmit}>
+        <div>
+          <label className="label" htmlFor="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            placeholder="you@example.com"
+            className="input-field"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
 
-        </>
-    )
+        <button type="submit" className="btn-primary w-full">
+          Send instructions
+        </button>
+      </form>
+
+      <div className="mt-6 space-y-3 text-center">
+        <Link to="/" className="block text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">
+          Back to sign in
+        </Link>
+        <Link to="/register" className="block text-sm text-slate-500 hover:text-slate-700 transition-colors">
+          Don't have an account? Sign up
+        </Link>
+      </div>
+    </>
+  )
 }
 
 export default ForgotPass
